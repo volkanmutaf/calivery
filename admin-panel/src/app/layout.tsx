@@ -1,9 +1,16 @@
-import type { Metadata } from "next";
+'use client';
+
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { AuthProvider } from "@/lib/auth-context";
-import { NotificationProvider } from "@/lib/notification-context";
+import { AuthProvider, useAuth } from '@/lib/auth-context';
+import { NotificationProvider } from '@/lib/notification-context';
 import ThemeInit from "@/components/ThemeInit";
+import { useRouter, usePathname } from 'next/navigation';
+import { useEffect } from 'react';
+import Sidebar from '@/components/Sidebar';
+import Loading from '@/components/Loading';
+import { UIProvider, useUI } from '@/lib/ui-context';
+import { TenantProvider, useTenant } from '@/lib/tenant-context';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,16 +22,97 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Calivery Admin Panel",
-  description: "California Catering Delivery Fleet Management",
+// Map route prefixes to feature flag keys
+const ROUTE_FEATURE_MAP: Record<string, string> = {
+    '/payouts': 'payouts',
+    '/earnings': 'payouts',
+    '/pay-adjustments': 'payouts',
+    '/finance': 'reports',
+    '/logs': 'reports',
+    '/assignments': 'auto_assign',
+    '/drivers': 'driver_tracking',
+    '/live-tracking': 'driver_tracking',
 };
+
+function AppContent({ children }: { children: React.ReactNode }) {
+    const { user, role, loading } = useAuth();
+    const { sidebarCollapsed } = useUI();
+    const { isFeatureEnabled, loading: tenantLoading } = useTenant();
+    const router = useRouter();
+    const pathname = usePathname();
+
+    const isLoginPage = pathname === '/login';
+    const isSharePage = pathname.startsWith('/share/');
+    const isSuperAdminPage = pathname.startsWith('/super-admin');
+
+    useEffect(() => {
+        if (loading) return;
+
+        // Redirect to login if not authenticated
+        if (!user && !isLoginPage && !isSharePage) {
+            router.push('/login');
+            return;
+        }
+
+        // Super admin should go to their own panel
+        if (user && role === 'super_admin' && !isSuperAdminPage && !isSharePage) {
+            router.push('/super-admin');
+            return;
+        }
+
+        // Protect specific dashboard roles
+        if (user && !isSuperAdminPage && !isLoginPage && !isSharePage && 
+            !['admin', 'tenant_admin', 'dispatcher', 'driver'].includes(role || '')) {
+            router.push('/login?error=unauthorized');
+        }
+    }, [user, role, loading, pathname, router, isLoginPage, isSharePage, isSuperAdminPage]);
+
+    // Route protection: redirect if feature is disabled
+    useEffect(() => {
+        if (loading || tenantLoading || isLoginPage || isSharePage || isSuperAdminPage) return;
+
+        for (const [routePrefix, featureKey] of Object.entries(ROUTE_FEATURE_MAP)) {
+            if (pathname.startsWith(routePrefix) && !isFeatureEnabled(featureKey)) {
+                router.push('/');
+                return;
+            }
+        }
+    }, [pathname, loading, tenantLoading, isFeatureEnabled, router, isLoginPage, isSharePage, isSuperAdminPage]);
+
+    if (loading || (tenantLoading && !isLoginPage && !isSharePage)) {
+        return <Loading />;
+    }
+
+    // Public or auth-less pages
+    if (isLoginPage || isSharePage) {
+        return <>{children}</>;
+    }
+
+    // Super Admin layout (minimal sidebar or just content)
+    if (isSuperAdminPage) {
+        return role === 'super_admin' ? <>{children}</> : null;
+    }
+
+    // Dashboard layout for normal users
+    if (!user || !['admin', 'tenant_admin', 'dispatcher', 'driver'].includes(role || '')) {
+        return null; // Redirecting...
+    }
+
+    return (
+        <div className="min-h-screen bg-background">
+            <Sidebar />
+            <main className={`min-h-screen transition-all duration-300 ${sidebarCollapsed ? 'ml-16' : 'ml-64'}`}>
+                {children}
+            </main>
+        </div>
+    );
+}
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
       <body
@@ -34,7 +122,11 @@ export default function RootLayout({
         <ThemeInit />
         <AuthProvider>
           <NotificationProvider>
-            {children}
+            <UIProvider>
+                <TenantProvider>
+                    <AppContent>{children}</AppContent>
+                </TenantProvider>
+            </UIProvider>
           </NotificationProvider>
         </AuthProvider>
       </body>
