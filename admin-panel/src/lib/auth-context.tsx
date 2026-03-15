@@ -52,7 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
                     const profileDoc = await getDoc(doc(firebaseDb, 'profiles', user.uid));
                     if (profileDoc.exists()) {
-                        const profileData = profileDoc.data() as Profile;
+                        const profileData = { ...profileDoc.data(), id: profileDoc.id } as Profile;
                         setProfile(profileData);
                         // If profile has super_admin, respect it; if in admins collection enforce admin; otherwise use profile role
                         if (profileData.role === 'super_admin') {
@@ -74,6 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                         if (user.email === 'superadmin@calivery.app') {
                             console.log('Profile missing for super admin email, auto-creating...');
                             const newProfile: Profile = {
+                                id: user.uid,
                                 role: 'super_admin',
                                 username: 'SuperAdmin',
                                 email: user.email,
@@ -101,6 +102,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                         } else if (user.email === 'driver@calivery.app' || user.email === 'admin@calivery.app' || isAdmin) {
                             console.log('Profile missing for admin email, auto-creating...');
                             const newProfile: Profile = {
+                                id: user.uid,
                                 role: 'admin',
                                 username: 'Admin',
                                 email: user.email,

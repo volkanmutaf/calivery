@@ -29,6 +29,7 @@ export type ActorRole = 'admin' | 'driver' | 'system';
 
 // Profile document
 export interface Profile {
+    id: string;
     role: UserRole;
     username: string;
     email: string | null;

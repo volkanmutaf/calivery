@@ -55,7 +55,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
         }
 
         // Super admin should go to their own panel
-        if (user && role === 'super_admin' && !isSuperAdminPage && !isSharePage) {
+        if (user && role === 'super_admin' && !isSuperAdminPage && !isTrackingPage) {
             router.push('/super-admin');
             return;
         }
@@ -77,9 +77,9 @@ function AppContent({ children }: { children: React.ReactNode }) {
                 return;
             }
         }
-    }, [pathname, loading, tenantLoading, isFeatureEnabled, router, isLoginPage, isSharePage, isSuperAdminPage]);
+    }, [pathname, loading, tenantLoading, isFeatureEnabled, router, isLoginPage, isTrackingPage, isSuperAdminPage]);
 
-    if (loading || (tenantLoading && !isLoginPage && !isSharePage)) {
+    if (loading || (tenantLoading && !isLoginPage && !isTrackingPage)) {
         return <Loading />;
     }
 

@@ -76,9 +76,9 @@ export default function LiveTrackingPage() {
         const unsubscribe = onSnapshot(driversQuery, (snapshot) => {
             const driversData: Profile[] = [];
             snapshot.forEach((doc) => {
-                const data = doc.data() as Profile;
+                const data = { ...doc.data(), id: doc.id } as Profile;
                 if (data.last_location) {
-                    driversData.push({ ...data, id: doc.id } as any);
+                    driversData.push(data);
                 }
             });
             setDrivers(driversData);
@@ -202,12 +202,12 @@ export default function LiveTrackingPage() {
                                 center={DEFAULT_CENTER}
                                 options={MAP_OPTIONS}
                             >
-                                {filteredDrivers.map((driver: any) => (
+                                {filteredDrivers.map((driver) => (
                                     <MarkerF
                                         key={driver.id}
                                         position={{
-                                            lat: driver.last_location.latitude,
-                                            lng: driver.last_location.longitude,
+                                            lat: driver.last_location!.latitude,
+                                            lng: driver.last_location!.longitude,
                                         }}
                                         onClick={() => setSelectedDriver(driver)}
                                         icon={{
@@ -231,8 +231,8 @@ export default function LiveTrackingPage() {
                                 {selectedDriver && (
                                     <InfoWindowF
                                         position={{
-                                            lat: (selectedDriver as any).last_location.latitude,
-                                            lng: (selectedDriver as any).last_location.longitude,
+                                            lat: selectedDriver.last_location!.latitude,
+                                            lng: selectedDriver.last_location!.longitude,
                                         }}
                                         onCloseClick={() => setSelectedDriver(null)}
                                     >
@@ -271,7 +271,7 @@ export default function LiveTrackingPage() {
                                                 </button>
                                                 <button 
                                                     className="mt-4 bg-slate-100 text-slate-600 p-1.5 rounded-lg hover:bg-slate-200 transition-colors border border-slate-200"
-                                                    onClick={() => handleShareLink((selectedDriver as any).id)}
+                                                    onClick={() => handleShareLink(selectedDriver.id)}
                                                     title="Share Tracking Link"
                                                 >
                                                     <Share2 className="h-4 w-4" />
@@ -296,7 +296,7 @@ export default function LiveTrackingPage() {
                                             <p className="text-xs text-text-muted italic">No drivers currently on duty.</p>
                                         </div>
                                     ) : (
-                                        filteredDrivers.map((driver: any) => (
+                                        filteredDrivers.map((driver) => (
                                             <button
                                                 key={driver.id}
                                                 className={`w-full text-left p-3 rounded-xl transition-all ${
@@ -314,7 +314,7 @@ export default function LiveTrackingPage() {
                                                         <p className="font-semibold text-xs truncate">{driver.username}</p>
                                                         <div className="flex items-center gap-2 mt-0.5">
                                                             <div className="h-1.5 w-1.5 rounded-full bg-emerald-500"></div>
-                                                            <p className="text-[10px] text-text-muted">Moving • {Math.round(driver.last_location.speed || 0)} mph</p>
+                                                            <p className="text-[10px] text-text-muted">Moving • {Math.round(driver.last_location!.speed || 0)} mph</p>
                                                         </div>
                                                     </div>
                                                 </div>
