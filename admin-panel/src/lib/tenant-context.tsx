@@ -93,6 +93,7 @@ export function TenantProvider({ children }: { children: ReactNode }) {
         // Listen for auth changes to reload tenant data
         const unsubscribe = firebaseAuth.onAuthStateChanged((user) => {
             if (user) {
+                setLoading(true); // Re-activate loading on auth change
                 loadTenantData();
             } else {
                 setTenantId(null);

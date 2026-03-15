@@ -131,14 +131,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 } catch (err) {
                     console.error('Error fetching profile:', err);
                     setError('Failed to load user profile');
+                } finally {
+                    setLoading(false);
                 }
             } else {
                 setProfile(null);
                 setRole(null);
                 setTenantId(null);
+                setLoading(false);
             }
-
-            setLoading(false);
         });
 
         return () => unsubscribe();
