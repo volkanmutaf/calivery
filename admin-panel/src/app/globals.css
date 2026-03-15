@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+:root {
+  /* Light Mode */
+  --background: #FFFFFF;
+  --surface: #F5F5F5;
+  --card: #FFFFFF;
+  --primary: #6200EE;
+  --secondary: #018786;
+  --text-primary: #000000;
+  --text-secondary: #5F6368;
+  --divider: #E0E0E0;
+  --error: #B00020;
+  --foreground: #000000; /* Fallback */
+}
+
+.dark {
+  /* Dark Mode */
+  --background: #121212;
+  --surface: #1E1E1E;
+  --card: #242424;
+  --primary: #BB86FC;
+  --secondary: #03DAC6;
+  --text-primary: #FFFFFF;
+  --text-secondary: #B3B3B3;
+  --divider: #2C2C2C;
+  --error: #CF6679;
+  --foreground: #FFFFFF;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-card: var(--card);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-text-main: var(--text-primary);
+  --color-text-muted: var(--text-secondary);
+  --color-divider: var(--divider);
+  --color-error: var(--error);
+  
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--text-primary);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer base {
+  button, [type='button'], [type='reset'], [type='submit'], [role='button'] {
+    cursor: pointer;
+  }
+}

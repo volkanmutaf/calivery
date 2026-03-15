@@ -1,0 +1,32 @@
+// Tab Icon Component - Redesigned
+const TabIcon = ({ label, focused }: { label: string; focused: boolean }) => {
+    const { t } = useTranslation();
+    
+    const getIconName = (name: string, isFocused: boolean): keyof typeof Ionicons.glyphMap => {
+        const icons: Record<string, { active: keyof typeof Ionicons.glyphMap; inactive: keyof typeof Ionicons.glyphMap }> = {
+            Tasks: { active: 'clipboard', inactive: 'clipboard-outline' },
+            History: { active: 'time', inactive: 'time-outline' },
+            Earnings: { active: 'wallet', inactive: 'wallet-outline' },
+            Account: { active: 'person', inactive: 'person-outline' }
+        };
+        return isFocused ? icons[name]?.active || 'clipboard' : icons[name]?.inactive || 'clipboard-outline';
+    };
+
+    return (
+        <View style={styles.tabIconContainer}>
+            <Ionicons 
+                name={getIconName(label, focused)} 
+                size={22} 
+                color={focused ? '#f59e0b' : '#94a3b8'} 
+            />
+            <Text 
+                style={[styles.tabLabelText, focused && styles.tabLabelFocused]}
+                numberOfLines={1}
+                adjustsFontSizeToFit
+                minimumFontScale={0.8}
+            >
+                {t(`navigation.${label.toLowerCase()}`)}
+            </Text>
+        </View>
+    );
+};

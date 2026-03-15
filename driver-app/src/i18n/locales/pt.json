@@ -1,0 +1,126 @@
+{
+    "common": {
+        "login": "Entrar",
+        "sign_in": "Entrar",
+        "sign_out": "Sair",
+        "email_placeholder": "Email ou Usuário",
+        "password_placeholder": "Senha",
+        "loading": "Carregando...",
+        "error_title": "Erro",
+        "success_title": "Sucesso",
+        "completed": "Concluído"
+    },
+    "auth": {
+        "login_title": "App de Motorista",
+        "login_subtitle": "California Catering Delivery",
+        "user_not_found": "Usuário não encontrado",
+        "wrong_password": "Senha incorreta",
+        "too_many_requests": "Muitas tentativas. Por favor, tente novamente mais tarde.",
+        "account_suspended": "Sua conta foi suspensa. Entre em contato com o suporte em support@calivery.app.",
+        "login_failed": "Falha no login",
+        "required_fields": "Usuário e senha obrigatórios",
+        "slogan": "Levando o catering adiante",
+        "forced_signout": "Você foi desconectado porque fez login em outro dispositivo."
+    },
+    "navigation": {
+        "tasks": "Tarefas",
+        "history": "Histórico",
+        "earnings": "Ganhos",
+        "account": "Conta",
+        "settings": "Configurações"
+    },
+    "tasks": {
+        "title": "Tarefas",
+        "today": "Hoje",
+        "tomorrow": "Amanhã",
+        "no_tasks": "Nenhuma tarefa encontrada",
+        "status": {
+            "new": "Novo",
+            "assigned": "Atribuído",
+            "in_progress": "Em Andamento",
+            "delivered": "Entregue"
+        },
+        "your_route": "Sua Rota",
+        "tasks_scheduled": "{{count}} tarefas agendadas",
+        "tap_for_details": "Toque para detalhes",
+        "pickup": "COLETA",
+        "dropoff": "ENTREGA"
+    },
+    "task_detail": {
+        "title": "Detalhes da Tarefa",
+        "pickup": "Coleta",
+        "delivery": "Entrega",
+        "completed": "Concluído",
+        "open_navigation": "Abrir Navegação",
+        "take_pickup_photo": "Tirar Foto da Coleta",
+        "take_dropoff_photo_opt": "Tirar Foto da Entrega",
+        "retake_photo": "Retirar Foto",
+        "picked_up": "Coletado",
+        "delivered": "Entregue",
+        "complete_previous": "Complete os passos anteriores primeiro",
+        "complete_pickup_first": "Complete a coleta primeiro",
+        "step_of": "Passo {{current}} de {{total}}",
+        "step_label": "Passo {{number}}",
+        "order_not_found": "Pedido não encontrado",
+        "swipe_pickup": "DESLIZE PARA CONFIRMAR COLETA",
+        "swipe_dropoff": "DESLIZE PARA CONFIRMAR ENTREGA",
+        "go_to_restaurant": "📦 Ir para o Restaurante",
+        "go_to_customer": "📍 Ir para o Cliente",
+        "order_ref": "Pedido #{{code}}",
+        "payout": "Pagamento",
+        "scheduled_time": "Horário Agendado",
+        "pickup_completed": "COLETA CONCLUÍDA",
+        "delivery_completed": "ENTREGA CONCLUÍDA",
+        "additional_note": "Nota Adicional"
+    },
+    "route": {
+        "completed_title": "Rota Concluída",
+        "completed_message": "Todas as tarefas concluídas! Obrigado pelo seu trabalho duro."
+    },
+    "history": {
+        "title": "Histórico",
+        "no_history": "Ainda não há pedidos concluídos",
+        "pickup_time": "Coleta",
+        "dropoff_time": "Entrega"
+    },
+    "earnings": {
+        "title": "Ganhos",
+        "no_earnings": "Ainda não há dados de ganhos",
+        "last_30_days": "Últimos 30 Dias",
+        "day": "Dia",
+        "week": "Semana",
+        "todays_earnings": "Ganhos de Hoje",
+        "weekly_earnings": "Ganhos Semanais",
+        "no_pay_today": "Sem detalhes de pagamento hoje",
+        "delivery_pay": "Pagamento de Entrega",
+        "tips": "Gorjetas",
+        "calivery_contribution": "Contribuição Calivery",
+        "adjustment_pay": "Pagamento de Ajuste",
+        "bonus_pay": "Pagamento de Bônus",
+        "view_activity": "Ver Atividade de Ganhos"
+    },
+    "earnings_activity": {
+        "title": "Atividade de Ganhos",
+        "no_activity": "Sem atividade de ganhos",
+        "no_activity_desc": "Você não tem atividade de ganhos no período selecionado.",
+        "filter_title": "Filtrar Atividade",
+        "filter_all": "Todos",
+        "filter_completed": "Concluído",
+        "filter_tips": "Gorjetas",
+        "filter_contribution": "Contribuição Calivery",
+        "filter_adjustment": "Pagamento de Ajuste",
+        "filter_bonus": "Pagamento de Bônus",
+        "source_system": "Sistema"
+    },
+    "settings": {
+        "title": "Configurações",
+        "language": "Idioma",
+        "theme": "Tema",
+        "dark_mode": "Modo Escuro",
+        "select_language": "Selecionar Idioma",
+        "theme_system": "Sistema",
+        "theme_light": "Claro",
+        "theme_dark": "Escuro",
+        "about": "Sobre"
+    }
+}

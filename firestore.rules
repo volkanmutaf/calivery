@@ -1,0 +1,178 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Checks if the user has an @calivery.app email (Emergency Backstop)
+    function isInternalUser() {
+      return isAuthenticated() && 
+             request.auth.token.email.matches('.*@calivery[.]app');
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && (
+          (
+            exists(/databases/$(database)/documents/profiles/$(request.auth.uid)) && 
+            get(/databases/$(database)/documents/profiles/$(request.auth.uid)).data.role in ['admin', 'super_admin', 'tenant_admin']
+          ) || 
+          isInternalUser() 
+      );
+    }
+
+    function isSuperAdmin() {
+      return isAuthenticated() && (
+          (
+            exists(/databases/$(database)/documents/profiles/$(request.auth.uid)) && 
+            get(/databases/$(database)/documents/profiles/$(request.auth.uid)).data.role in ['super_admin', 'admin']
+          ) || 
+          isInternalUser()
+      );
+    }
+    
+    function isDriver() {
+      return isAuthenticated() && 
+             exists(/databases/$(database)/documents/profiles/$(request.auth.uid)) &&
+             get(/databases/$(database)/documents/profiles/$(request.auth.uid)).data.role == 'driver';
+    }
+    
+    function isOwner(uid) {
+      return isAuthenticated() && request.auth.uid == uid;
+    }
+
+    // Tenant isolation helpers
+    function getTenantId() {
+      return request.auth.token.tenant_id;
+    }
+
+    // Check if the document belongs to the same tenant as the requesting user
+    // Backward compatible: if doc has no tenant_id, allow access
+    function isSameTenant() {
+      return !('tenant_id' in resource.data) || 
+             !('tenant_id' in request.auth.token) ||
+             resource.data.tenant_id == request.auth.token.tenant_id;
+    }
+
+    // For new documents being created, check tenant_id matches
+    function isCreatingSameTenant() {
+      return !('tenant_id' in request.resource.data) || 
+             !('tenant_id' in request.auth.token) ||
+             request.resource.data.tenant_id == request.auth.token.tenant_id;
+    }
+
+    // Tenants collection
+    match /tenants/{tenantId} {
+      // Tenant members can read their own tenant
+      allow read: if isAuthenticated() && (
+        getTenantId() == tenantId || isSuperAdmin()
+      );
+      // Only super admin (via Cloud Functions admin SDK) can write
+      allow write: if false;
+    }
+
+    // Tenant config subcollection
+    match /tenants/{tenantId}/config/{docId} {
+      // Tenant members can read their own config
+      allow read: if isAuthenticated() && (
+        getTenantId() == tenantId || isSuperAdmin()
+      );
+      // Only super admin (via Cloud Functions admin SDK) can write
+      allow write: if false;
+    }
+    
+    // Profiles collection (single source of truth)
+    match /profiles/{uid} {
+      // Admins can read/write all profiles (within same tenant)
+      // Drivers can only read their own profile
+      allow read: if (isAdmin() && isSameTenant()) || isOwner(uid);
+      allow write: if isAdmin() && isSameTenant();
+      // Driver can update their own phone, upload a pending photo, or set session ID
+      allow update: if isOwner(uid) && 
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['phone', 'pending_photo_url', 'active_session_id']) &&
+        resource.data.is_active == true;
+    }
+    
+    // Orders collection
+    match /orders/{orderId} {
+      // Allow read/update if you are the admin (same tenant) OR if you are the assigned driver
+      allow read: if (isAdmin() && isSameTenant()) || (isAuthenticated() && resource.data.assigned_driver_id == request.auth.uid);
+      allow update: if (isAdmin() && isSameTenant()) || (isAuthenticated() && resource.data.assigned_driver_id == request.auth.uid);
+      allow create: if isAdmin() && isCreatingSameTenant();
+      allow delete: if isAdmin() && isSameTenant();
+      
+      // Order events subcollection (audit log)
+      match /events/{eventId} {
+        allow read: if (isAdmin() && isSameTenant()) || (isAuthenticated() && get(/databases/$(database)/documents/orders/$(orderId)).data.assigned_driver_id == request.auth.uid);
+        // Only Cloud Functions (admin SDK) can write events
+        allow write: if false;
+      }
+      
+      // Order photos metadata subcollection
+      match /photos/{photoId} {
+        allow read: if (isAdmin() && isSameTenant()) || (isAuthenticated() && get(/databases/$(database)/documents/orders/$(orderId)).data.assigned_driver_id == request.auth.uid);
+        // Photos are uploaded via Cloud Functions
+        allow write: if false;
+      }
+    }
+    
+    // Route groups collection
+    match /route_groups/{routeGroupId} {
+      // Admins can read/write all route groups (within same tenant)
+      // Drivers can only read their own route groups
+      allow read: if (isAdmin() && isSameTenant()) || 
+        (isDriver() && resource.data.driver_id == request.auth.uid);
+      allow write: if isAdmin() && isSameTenant();
+      
+      // Route steps subcollection
+      match /steps/{stepId} {
+        allow read: if (isAdmin() && isSameTenant()) || 
+          (isDriver() && get(/databases/$(database)/documents/route_groups/$(routeGroupId)).data.driver_id == request.auth.uid);
+        // Steps are managed by Cloud Functions
+        allow write: if false;
+      }
+    }
+    
+    // Weekly earnings collection
+    match /earnings_weekly/{docId} {
+      // Admins can read all earnings (within same tenant)
+      // Drivers can only read their own earnings
+      allow read: if (isAdmin() && isSameTenant()) || 
+        (isDriver() && resource.data.driver_id == request.auth.uid);
+      // Earnings are calculated by Cloud Functions
+      allow write: if false;
+    }
+    
+    // Daily stats collection
+    match /stats_daily/{docId} {
+      allow read: if (isAdmin() && isSameTenant()) || 
+        (isDriver() && resource.data.driver_id == request.auth.uid);
+      allow write: if false;
+    }
+    
+    // System counters collection (for order_code generation)
+    match /counters/{counterId} {
+      allow read: if isAdmin();
+      allow write: if false; // Only Cloud Functions
+    }
+
+    // Pay Adjustments collection
+    match /pay_adjustments/{docId} {
+      allow read: if (isAdmin() && isSameTenant()) || (isDriver() && resource.data.driver_id == request.auth.uid);
+      allow create: if isAdmin() && isCreatingSameTenant();
+      allow update: if isAdmin() && isSameTenant();
+      allow delete: if isAdmin() && isSameTenant();
+    }
+
+    // Payouts collection
+    match /payouts/{docId} {
+      allow read: if (isAdmin() && isSameTenant()) || (isDriver() && resource.data.driver_id == request.auth.uid);
+      allow create: if isAdmin() && isCreatingSameTenant();
+      allow update: if isAdmin() && isSameTenant();
+      allow delete: if false;
+    }
+  }
+}

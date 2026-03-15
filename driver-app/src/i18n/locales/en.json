@@ -1,0 +1,127 @@
+{
+    "common": {
+        "login": "Login",
+        "sign_in": "Sign In",
+        "sign_out": "Sign Out",
+        "email_placeholder": "Email or Username",
+        "password_placeholder": "Password",
+        "loading": "Loading...",
+        "error_title": "Error",
+        "success_title": "Success",
+        "completed": "Completed"
+    },
+    "auth": {
+        "login_title": "Driver App",
+        "login_subtitle": "California Catering Delivery",
+        "user_not_found": "User not found",
+        "wrong_password": "Wrong password",
+        "too_many_requests": "Too many requests. Please try again later.",
+        "account_suspended": "Your account has been suspended. Please contact support at support@calivery.app.",
+        "login_failed": "Login failed",
+        "required_fields": "Username and password required",
+        "slogan": "Moving Catering Forward",
+        "forced_signout": "You have been signed out because you logged in from another device."
+    },
+    "navigation": {
+        "tasks": "Tasks",
+        "history": "History",
+        "earnings": "Earnings",
+        "account": "Account",
+        "settings": "Settings"
+    },
+    "tasks": {
+        "title": "Tasks",
+        "today": "Today",
+        "tomorrow": "Tomorrow",
+        "no_tasks": "No tasks found",
+        "status": {
+            "new": "New",
+            "assigned": "Assigned",
+            "in_progress": "In Progress",
+            "delivered": "Delivered"
+        },
+        "your_route": "Your Route",
+        "tasks_scheduled": "{{count}} tasks scheduled",
+        "tap_for_details": "Tap for details",
+        "pickup": "PICKUP",
+        "dropoff": "DROPOFF",
+        "complete_previous_to_unlock": "Complete previous task to unlock"
+    },
+    "task_detail": {
+        "title": "Task Details",
+        "pickup": "Pickup",
+        "delivery": "Delivery",
+        "completed": "Completed",
+        "open_navigation": "Open Navigation",
+        "take_pickup_photo": "Take Pickup Photo",
+        "take_dropoff_photo_opt": "Take Delivery Photo",
+        "retake_photo": "Retake Photo",
+        "picked_up": "Picked Up",
+        "delivered": "Delivered",
+        "complete_previous": "Complete previous steps first",
+        "complete_pickup_first": "Complete pickup first",
+        "step_of": "Step {{current}} of {{total}}",
+        "step_label": "Step {{number}}",
+        "order_not_found": "Order not found",
+        "swipe_pickup": "SWIPE TO CONFIRM PICKUP",
+        "swipe_dropoff": "SWIPE TO CONFIRM DELIVERY",
+        "go_to_restaurant": "📦 Go to Restaurant",
+        "go_to_customer": "📍 Go to Customer",
+        "order_ref": "Order #{{code}}",
+        "payout": "Payout",
+        "scheduled_time": "Scheduled Time",
+        "pickup_completed": "PICKUP COMPLETED",
+        "delivery_completed": "DELIVERY COMPLETED",
+        "additional_note": "Additional Note"
+    },
+    "route": {
+        "completed_title": "Route Completed",
+        "completed_message": "All tasks finished! Thank you for your hard work."
+    },
+    "history": {
+        "title": "History",
+        "no_history": "No completed orders yet",
+        "pickup_time": "Pickup",
+        "dropoff_time": "Dropoff"
+    },
+    "earnings": {
+        "title": "Earnings",
+        "no_earnings": "No earnings data yet",
+        "last_30_days": "Last 30 Days",
+        "day": "Day",
+        "week": "Week",
+        "todays_earnings": "Today's Earnings",
+        "weekly_earnings": "Weekly Earnings",
+        "no_pay_today": "No pay details yet this day",
+        "delivery_pay": "Delivery Pay",
+        "tips": "Tips",
+        "calivery_contribution": "Calivery Contribution",
+        "adjustment_pay": "Adjustment Pay",
+        "bonus_pay": "Bonus Pay",
+        "view_activity": "View Earnings Activity"
+    },
+    "earnings_activity": {
+        "title": "Earnings Activity",
+        "no_activity": "No earnings activity",
+        "no_activity_desc": "You have no earnings activity in the selected time frame.",
+        "filter_title": "Filter Activity",
+        "filter_all": "All",
+        "filter_completed": "Completed",
+        "filter_tips": "Tips",
+        "filter_contribution": "Calivery Contribution",
+        "filter_adjustment": "Adjustment Pay",
+        "filter_bonus": "Bonus Pay",
+        "source_system": "System"
+    },
+    "settings": {
+        "title": "Settings",
+        "language": "Language",
+        "theme": "Theme",
+        "dark_mode": "Dark Mode",
+        "select_language": "Select Language",
+        "theme_system": "System",
+        "theme_light": "Light",
+        "theme_dark": "Dark",
+        "about": "About"
+    }
+}

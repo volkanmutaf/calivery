@@ -1,0 +1,127 @@
+{
+    "common": {
+        "login": "Giriş",
+        "sign_in": "Giriş Yap",
+        "sign_out": "Çıkış Yap",
+        "email_placeholder": "Email veya Kullanıcı Adı",
+        "password_placeholder": "Şifre",
+        "loading": "Yükleniyor...",
+        "error_title": "Hata",
+        "success_title": "Başarılı",
+        "completed": "Tamamlandı"
+    },
+    "auth": {
+        "login_title": "Sürücü Uygulaması",
+        "login_subtitle": "California Catering Delivery",
+        "user_not_found": "Kullanıcı bulunamadı",
+        "wrong_password": "Yanlış şifre",
+        "too_many_requests": "Çok fazla istek. Lütfen daha sonra tekrar deneyin.",
+        "account_suspended": "Hesabınız askıya alınmıştır. Lütfen support@calivery.app adresinden destek ile iletişime geçin.",
+        "login_failed": "Giriş başarısız",
+        "required_fields": "Kullanıcı adı ve şifre gerekli",
+        "slogan": "Catering'i İleri Taşıyoruz",
+        "forced_signout": "Başka bir cihazdan giriş yapıldığı için oturumunuz kapatıldı."
+    },
+    "navigation": {
+        "tasks": "Görevler",
+        "history": "Geçmiş",
+        "earnings": "Kazançlar",
+        "account": "Hesap",
+        "settings": "Ayarlar"
+    },
+    "tasks": {
+        "title": "Görevler",
+        "today": "Bugün",
+        "tomorrow": "Yarın",
+        "no_tasks": "Görev bulunamadı",
+        "status": {
+            "new": "Yeni",
+            "assigned": "Atandı",
+            "in_progress": "Sürüyor",
+            "delivered": "Teslim Edildi"
+        },
+        "your_route": "Rotanız",
+        "tasks_scheduled": "{{count}} görev planlandı",
+        "tap_for_details": "Detaylar için dokun",
+        "pickup": "ALIŞ",
+        "dropoff": "TESLİMAT",
+        "complete_previous_to_unlock": "Kilidi açmak için önceki görevi tamamlayın"
+    },
+    "task_detail": {
+        "title": "Görev Detayları",
+        "pickup": "Alış",
+        "delivery": "Teslimat",
+        "completed": "Tamamlandı",
+        "open_navigation": "Navigasyonu Aç",
+        "take_pickup_photo": "Alış Fotoğrafı Çek",
+        "take_dropoff_photo_opt": "Teslimat Fotoğrafı Çek",
+        "retake_photo": "Fotoğrafı Tekrar Çek",
+        "picked_up": "Alındı",
+        "delivered": "Teslim Edildi",
+        "complete_previous": "Önce önceki adımları tamamlayın",
+        "complete_pickup_first": "Önce alışı tamamlayın",
+        "step_of": "Adım {{current}} / {{total}}",
+        "step_label": "Adım {{number}}",
+        "order_not_found": "Sipariş bulunamadı",
+        "swipe_pickup": "ALIŞI ONAYLAMAK İÇİN KAYDIR",
+        "swipe_dropoff": "TESLİMATI ONAYLAMAK İÇİN KAYDIR",
+        "go_to_restaurant": "📦 Restorana Git",
+        "go_to_customer": "📍 Müşteriye Git",
+        "order_ref": "Sipariş #{{code}}",
+        "payout": "Kazanç",
+        "scheduled_time": "Planlanan Saat",
+        "pickup_completed": "ALIŞ TAMAMLANDI",
+        "delivery_completed": "TESLİMAT TAMAMLANDI",
+        "additional_note": "Ek Not"
+    },
+    "route": {
+        "completed_title": "Rota Tamamlandı",
+        "completed_message": "Tüm görevler bitti! Emeğin için teşekkürler."
+    },
+    "history": {
+        "title": "Geçmiş",
+        "no_history": "Henüz tamamlanmış sipariş yok",
+        "pickup_time": "Alış",
+        "dropoff_time": "Teslimat"
+    },
+    "earnings": {
+        "title": "Kazançlar",
+        "no_earnings": "Henüz kazanç verisi yok",
+        "last_30_days": "Son 30 Gün",
+        "day": "Gün",
+        "week": "Hafta",
+        "todays_earnings": "Bugünün Kazancı",
+        "weekly_earnings": "Haftalık Kazanç",
+        "no_pay_today": "Bugün henüz ödeme bilgisi yok",
+        "delivery_pay": "Teslimat Ücreti",
+        "tips": "Bahşişler",
+        "calivery_contribution": "Calivery Katkısı",
+        "adjustment_pay": "Düzeltme Ödemesi",
+        "bonus_pay": "Bonus Ödemesi",
+        "view_activity": "Kazanç Etkinliğini Görüntüle"
+    },
+    "earnings_activity": {
+        "title": "Kazanç Etkinliği",
+        "no_activity": "Kazanç etkinliği yok",
+        "no_activity_desc": "Seçilen zaman diliminde kazanç etkinliğiniz bulunmamaktadır.",
+        "filter_title": "Etkinliği Filtrele",
+        "filter_all": "Tümü",
+        "filter_completed": "Tamamlanan",
+        "filter_tips": "Bahşişler",
+        "filter_contribution": "Calivery Katkısı",
+        "filter_adjustment": "Düzeltme Ödemesi",
+        "filter_bonus": "Bonus Ödemesi",
+        "source_system": "Sistem"
+    },
+    "settings": {
+        "title": "Ayarlar",
+        "language": "Dil",
+        "theme": "Tema",
+        "dark_mode": "Karanlık Mod",
+        "select_language": "Dil Seçin",
+        "theme_system": "Sistem",
+        "theme_light": "Açık",
+        "theme_dark": "Koyu",
+        "about": "Hakkında"
+    }
+}

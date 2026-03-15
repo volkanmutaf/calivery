@@ -1,0 +1,2 @@
+﻿src/components/StatTile.tsx(5,28): error TS2307: Cannot find module 'lucide-react-native' or its corresponding type declarations.
+src/components/TaskCard.tsx(82,23): error TS2339: Property 'border' does not exist on type '{ background: string; surface: string; card: string; primary: string; secondary: string; textPrimary: string; textSecondary: string; divider: string; error: string; success: string; warning: string; info: string; disabled: string; }'.

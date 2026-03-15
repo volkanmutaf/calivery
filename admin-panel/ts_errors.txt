@@ -1,0 +1,15 @@
+﻿src/app/(dashboard)/drivers/page.tsx(24,62): error TS2322: Type 'string | null' is not assignable to type 'string | undefined'.
+  Type 'null' is not assignable to type 'string | undefined'.
+src/app/(dashboard)/earnings/page.tsx(111,52): error TS2345: Argument of type '{ driver_id: string; week_start_date: string; week_end_date: string; total_earnings: number; order_count: number; last_calculated_at: any; orders: never[]; adjustments: never[]; }' is not assignable to parameter of type 'EarningsWeeklyWithOrders'.
+  Type '{ driver_id: string; week_start_date: string; week_end_date: string; total_earnings: number; order_count: number; last_calculated_at: any; orders: never[]; adjustments: never[]; }' is missing the following properties from type 'EarningsWeekly': id, paid_out_cents, status, updated_at
+src/app/(dashboard)/earnings/page.tsx(162,52): error TS2345: Argument of type '{ driver_id: string; week_start_date: string; week_end_date: string; total_earnings: number; order_count: number; last_calculated_at: any; orders: never[]; adjustments: never[]; }' is not assignable to parameter of type 'EarningsWeeklyWithOrders'.
+  Type '{ driver_id: string; week_start_date: string; week_end_date: string; total_earnings: number; order_count: number; last_calculated_at: any; orders: never[]; adjustments: never[]; }' is missing the following properties from type 'EarningsWeekly': id, paid_out_cents, status, updated_at
+src/app/(dashboard)/earnings/page.tsx(434,162): error TS2339: Property 'toDate' does not exist on type 'Date'.
+src/app/(dashboard)/earnings/page.tsx(434,193): error TS2339: Property 'toDate' does not exist on type 'Date'.
+src/app/(dashboard)/earnings/page.tsx(434,248): error TS2339: Property 'toDate' does not exist on type 'Date'.
+src/app/(dashboard)/earnings/page.tsx(434,274): error TS2339: Property 'toDate' does not exist on type 'Date'.
+src/app/(dashboard)/earnings/page.tsx(435,157): error TS2339: Property 'toDate' does not exist on type 'Date'.
+src/app/(dashboard)/earnings/page.tsx(435,188): error TS2339: Property 'toDate' does not exist on type 'Date'.
+src/app/(dashboard)/orders/page.tsx(37,26): error TS2304: Cannot find name 'useTenant'.
+src/app/(dashboard)/payouts/weekly/page.tsx(87,44): error TS2304: Cannot find name 'where'.
+src/app/(dashboard)/payouts/weekly/page.tsx(99,40): error TS2304: Cannot find name 'where'.
