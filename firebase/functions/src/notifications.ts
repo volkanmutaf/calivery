@@ -239,28 +239,37 @@ export const onOrderAssignedNotification = onDocumentUpdated(
             const driverId = after.assigned_driver_id;
 
             // Debounce check: Don't send if we sent one in the last 2 minutes
+            // Use a transaction to ensure atomic check and update, preventing race conditions with multiple orders
             const profileRef = db.collection('profiles').doc(driverId);
-            const profileSnap = await profileRef.get();
             const now = admin.firestore.Timestamp.now();
 
-            if (profileSnap.exists) {
-                const profileData = profileSnap.data();
+            let shouldNotify = false;
+            await db.runTransaction(async (transaction) => {
+                const profileDoc = await transaction.get(profileRef);
+                if (!profileDoc.exists) return;
+
+                const profileData = profileDoc.data();
                 const lastNotified = profileData?.last_assigned_notification_at;
                 
                 if (lastNotified) {
                     const diffSeconds = now.seconds - lastNotified.seconds;
                     if (diffSeconds < 120) {
-                        console.log(`Debouncing assignment notification for driver ${driverId}. Last sent ${diffSeconds}s ago.`);
-                        return;
+                        return; // Still in debounce window, exit without updating
                     }
                 }
-            }
 
-            // Update profile with last notification time BEFORE sending (to handle race conditions better)
-            await profileRef.update({
-                last_assigned_notification_at: now,
-                updated_at: now
+                // Update profile with last notification time
+                transaction.update(profileRef, {
+                    last_assigned_notification_at: now,
+                    updated_at: now
+                });
+                shouldNotify = true;
             });
+
+            if (!shouldNotify) {
+                console.log(`Debouncing assignment notification for driver ${driverId} (consolidated).`);
+                return;
+            }
 
             const devicesSnap = await db.collection(`tenants/${tenantId}/driver_devices`)
                 .where('driver_id', '==', driverId)
