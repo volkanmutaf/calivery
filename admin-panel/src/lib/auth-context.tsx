@@ -150,12 +150,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setLoading(true);
         try {
             await signInWithEmailAndPassword(firebaseAuth, email, password);
+            // We DO NOT set loading(false) here on success.
+            // Instead, we wait for onAuthStateChanged to fetch the profile and set loading(false).
         } catch (err: unknown) {
             const errorMessage = err instanceof Error ? err.message : 'Failed to sign in';
             setError(errorMessage);
+            setLoading(false); // Set to false only on error
             throw err;
-        } finally {
-            setLoading(false);
         }
     };
 
