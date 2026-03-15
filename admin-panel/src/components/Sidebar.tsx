@@ -64,8 +64,19 @@ export default function Sidebar() {
         }
     ];
 
+    // Add Super Admin section if role is super_admin
+    const allSections = [...navSections];
+    if (role === 'super_admin') {
+        allSections.unshift({
+            title: 'Platform',
+            items: [
+                { href: '/super-admin', label: 'Super Admin', icon: Shield },
+            ]
+        });
+    }
+
     // Filter nav sections by feature flags
-    const filteredSections = navSections.map(section => ({
+    const filteredSections = allSections.map(section => ({
         ...section,
         items: section.items.filter(item =>
             !item.featureKey || isFeatureEnabled(item.featureKey)

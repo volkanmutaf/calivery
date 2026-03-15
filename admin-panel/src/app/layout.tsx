@@ -42,14 +42,14 @@ function AppContent({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
 
     const isLoginPage = pathname === '/login';
-    const isSharePage = pathname.startsWith('/share/');
+    const isTrackingPage = pathname.startsWith('/tracking/');
     const isSuperAdminPage = pathname.startsWith('/super-admin');
 
     useEffect(() => {
         if (loading) return;
 
         // Redirect to login if not authenticated
-        if (!user && !isLoginPage && !isSharePage) {
+        if (!user && !isLoginPage && !isTrackingPage) {
             router.push('/login');
             return;
         }
@@ -61,15 +61,15 @@ function AppContent({ children }: { children: React.ReactNode }) {
         }
 
         // Protect specific dashboard roles
-        if (user && !isSuperAdminPage && !isLoginPage && !isSharePage && 
+        if (user && !isSuperAdminPage && !isLoginPage && !isTrackingPage && 
             !['admin', 'tenant_admin', 'dispatcher', 'driver'].includes(role || '')) {
             router.push('/login?error=unauthorized');
         }
-    }, [user, role, loading, pathname, router, isLoginPage, isSharePage, isSuperAdminPage]);
+    }, [user, role, loading, pathname, router, isLoginPage, isTrackingPage, isSuperAdminPage]);
 
     // Route protection: redirect if feature is disabled
     useEffect(() => {
-        if (loading || tenantLoading || isLoginPage || isSharePage || isSuperAdminPage) return;
+        if (loading || tenantLoading || isLoginPage || isTrackingPage || isSuperAdminPage) return;
 
         for (const [routePrefix, featureKey] of Object.entries(ROUTE_FEATURE_MAP)) {
             if (pathname.startsWith(routePrefix) && !isFeatureEnabled(featureKey)) {
@@ -84,7 +84,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
     }
 
     // Public or auth-less pages
-    if (isLoginPage || isSharePage) {
+    if (isLoginPage || isTrackingPage) {
         return <>{children}</>;
     }
 

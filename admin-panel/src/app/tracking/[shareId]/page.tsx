@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import { GoogleMap, useJsApiLoader, MarkerF } from '@react-google-maps/api';
+import { GoogleMap, useJsApiLoader, MarkerF, PolylineF } from '@react-google-maps/api';
 import { doc, getDoc, onSnapshot, collection, query, where, orderBy, limit, getDocs } from 'firebase/firestore';
 import { firebaseDb } from '@/lib/firebase';
 import { Profile, Order } from '@/types';
@@ -31,6 +31,7 @@ export default function PublicTrackingPage() {
     const [driver, setDriver] = useState<Profile | null>(null);
     const [activeOrder, setActiveOrder] = useState<Order | null>(null);
     const [nextStep, setNextStep] = useState<any | null>(null);
+    const [activeRoute, setActiveRoute] = useState<any[]>([]);
     const [eta, setEta] = useState<string>('Calculating...');
 
     const { isLoaded } = useJsApiLoader({
@@ -78,6 +79,14 @@ export default function PublicTrackingPage() {
                             if (!stepsSnap.empty) {
                                 const stepData = stepsSnap.docs[0].data();
                                 setNextStep(stepData);
+
+                                // Fetch ALL steps for the route line
+                                const allStepsSnap = await getDocs(query(stepsRef, orderBy('sequence_index', 'asc')));
+                                const routePoints = allStepsSnap.docs.map(doc => ({
+                                    lat: doc.data().lat,
+                                    lng: doc.data().lng
+                                }));
+                                setActiveRoute(routePoints);
 
                                 // Fetch the actual order info
                                 const orderSnap = await getDoc(doc(firebaseDb, 'orders', stepData.order_id));
@@ -181,6 +190,16 @@ export default function PublicTrackingPage() {
                                     scaledSize: new window.google.maps.Size(48, 48),
                                 }}
                             />
+                            {activeRoute.length > 0 && (
+                                <PolylineF
+                                    path={activeRoute}
+                                    options={{
+                                        strokeColor: "#6366f1",
+                                        strokeOpacity: 0.8,
+                                        strokeWeight: 4,
+                                    }}
+                                />
+                            )}
                         </GoogleMap>
                     ) : (
                         <div className="h-full w-full bg-slate-100 flex items-center justify-center">

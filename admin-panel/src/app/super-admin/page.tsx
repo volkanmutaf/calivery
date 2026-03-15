@@ -26,7 +26,8 @@ import {
     Trash2,
     ShieldBan,
     CheckCircle,
-    AlertTriangle
+    AlertTriangle,
+    LogOut
 } from 'lucide-react';
 import type { Tenant, FeatureFlags, TenantLimits } from '@/types';
 
@@ -68,7 +69,7 @@ const FEATURE_LABELS: Record<keyof FeatureFlags, string> = {
 // ─── Page Component ────────────────────────────────────────────────────
 
 export default function SuperAdminPage() {
-    const { role, loading: authLoading } = useAuth();
+    const { role, loading: authLoading, logout } = useAuth();
     const { showNotification } = useNotification();
 
     // ── State ─────────────────────────────────────────────────────────
@@ -370,6 +371,13 @@ export default function SuperAdminPage() {
                     >
                         <Plus size={18} />
                         New Tenant
+                    </button>
+                    <button
+                        onClick={logout}
+                        className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-500 font-semibold hover:bg-red-500/20 transition-all shadow-lg shadow-red-500/10"
+                    >
+                        <LogOut size={18} />
+                        Logout
                     </button>
                 </div>
             </div>

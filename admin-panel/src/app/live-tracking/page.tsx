@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { GoogleMap, useJsApiLoader, MarkerF, InfoWindowF } from '@react-google-maps/api';
-import { collection, query, where, onSnapshot } from 'firebase/firestore';
+import { GoogleMap, useJsApiLoader, MarkerF, InfoWindowF, PolylineF } from '@react-google-maps/api';
+import { collection, query, where, onSnapshot, getDocs, orderBy } from 'firebase/firestore';
 import { firebaseDb } from '@/lib/firebase';
 import { useAuth } from '@/lib/auth-context';
 import { useTenant } from '@/lib/tenant-context';
@@ -18,8 +18,8 @@ import {
     RefreshCw,
     Share2
 } from 'lucide-react';
-import Sidebar from '@/components/Sidebar';
 import { useNotification } from '@/lib/notification-context';
+import { useUI } from '@/lib/ui-context';
 
 const MAP_CONTAINER_STYLE = {
     width: '100%',
@@ -51,6 +51,8 @@ export default function LiveTrackingPage() {
     const [selectedDriver, setSelectedDriver] = useState<Profile | null>(null);
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
+    const [activeRoute, setActiveRoute] = useState<any[]>([]);
+    const { sidebarCollapsed } = useUI();
 
     const { isLoaded, loadError } = useJsApiLoader({
         googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY || process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '',
@@ -89,6 +91,40 @@ export default function LiveTrackingPage() {
         return () => unsubscribe();
     }, [tenantId, userRole]);
 
+    // Fetch route when driver is selected
+    useEffect(() => {
+        if (!selectedDriver) {
+            setActiveRoute([]);
+            return;
+        }
+
+        const fetchRoute = async () => {
+            const groupsRef = collection(firebaseDb, 'route_groups');
+            const q = query(
+                groupsRef, 
+                where('driver_id', '==', selectedDriver.id),
+                where('status', '==', 'active')
+            );
+            
+            const querySnapshot = await getDocs(q);
+            if (!querySnapshot.empty) {
+                const groupId = querySnapshot.docs[0].id;
+                const stepsRef = collection(firebaseDb, `route_groups/${groupId}/steps`);
+                const stepsSnap = await getDocs(query(stepsRef, orderBy('sequence_index', 'asc')));
+                
+                const routePoints = stepsSnap.docs.map(doc => ({
+                    lat: doc.data().lat,
+                    lng: doc.data().lng
+                }));
+                setActiveRoute(routePoints);
+            } else {
+                setActiveRoute([]);
+            }
+        };
+
+        fetchRoute();
+    }, [selectedDriver]);
+
     const handleShareLink = (driverId: string) => {
         const baseUrl = window.location.origin;
         const shareUrl = `${baseUrl}/tracking/${driverId}`;
@@ -117,9 +153,8 @@ export default function LiveTrackingPage() {
     }
 
     return (
-        <div className="flex h-screen bg-background">
-            <Sidebar />
-            <main className="flex-1 flex flex-col md:ml-64 transition-all duration-300">
+        <div className="flex h-screen bg-background overflow-hidden relative">
+            <main className="flex-1 flex flex-col transition-all duration-300">
                 {/* Header Section */}
                 <header className="h-16 border-b border-divider bg-card px-6 flex items-center justify-between z-10">
                     <div className="flex items-center gap-3">
@@ -181,6 +216,17 @@ export default function LiveTrackingPage() {
                                         }}
                                     />
                                 ))}
+
+                                {activeRoute.length > 0 && (
+                                    <PolylineF
+                                        path={activeRoute}
+                                        options={{
+                                            strokeColor: "#6366f1",
+                                            strokeOpacity: 0.8,
+                                            strokeWeight: 4,
+                                        }}
+                                    />
+                                )}
 
                                 {selectedDriver && (
                                     <InfoWindowF
